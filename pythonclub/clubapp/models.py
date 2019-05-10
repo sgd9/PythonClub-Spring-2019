@@ -23,12 +23,16 @@ class Product(models.Model):
     producturl=models.URLField(null=True, blank=True)
     productdescription=models.TextField()
 
-    def memberdiscount(self):
-        discountpercent=.05
-        return float(self.productprice) * discountpercent
-
     def __str__(self):
         return self.productname
+
+    def memberDiscount(self):
+        discount = 0.05
+        return float((self.productprice) * discount)
+
+    def discountedPrice(self):
+        discount = self.memberDiscount()
+        return float((self.productprice) - discount) 
     
     class Meta:
         db_table='product'
@@ -37,7 +41,7 @@ class Product(models.Model):
 class Review(models.Model):
     reviewtitle=models.CharField(max_length=255)
     reviewdate=models.DateField()
-    product=models.ForeignKey(Product, on_delete=models.CASCADE)
+    product=models.ForeignKey(Product, on_delete=models.DO_NOTHING)
     user=models.ManyToManyField(User)
     reviewrating=models.SmallIntegerField()
     reviewtext=models.TextField()
